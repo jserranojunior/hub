@@ -14,7 +14,7 @@ services:
     networks:
       - stack_ponte
     ports:
-      - "3180:80"
+      - "3120:80"
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.hub.rule=Host(`hub.${DOMAIN}`, `cartaohub.com`, `www.cartaohub.com`)"
