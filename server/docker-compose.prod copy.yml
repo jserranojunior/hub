@@ -1,0 +1,35 @@
+version: "3"
+
+networks:
+  stack_ponte:
+    external: true
+
+services:
+  frontend_sefro:
+    container_name: "frontend_sefro"
+    image: "webdevops/apache:latest"
+    networks:
+      - stack_ponte
+    volumes:
+      - "${PATHPESSOAL}/sefro/front/dist:/app"
+    ports:
+      - 4081:80
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.sefro.rule=Host(`sefro.${DOMAIN}`,`www.sefro.${DOMAIN}`, `bansefro.com`, `www.bansefro.com`)"
+      - "traefik.http.services.sefro.loadbalancer.server.port=80"
+
+  backend_sefro:
+    container_name: "backend_sefro"
+    image: golang:1.16.3
+    networks:
+      - stack_ponte
+    volumes:
+      - ${PATHPESSOAL}/sefro/backgo:/app
+    ports:
+      - 4021:8000
+    command: "/bin/sh -c 'cd /app && ls && ./main'"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.apisefro.rule=Host(`apisefro.${DOMAIN}`)"
+      - "traefik.http.services.apisefro.loadbalancer.server.port=8000"

@@ -1,0 +1,22 @@
+version: "3"
+
+networks:
+  stack_ponte:
+    external: true
+
+services:
+  frontend_hub:
+    container_name: "hub"
+    image: webdevops/apache
+    working_dir: /app
+    volumes:
+      - "${PATHPESSOAL}/hub:/app"
+    networks:
+      - stack_ponte
+    ports:
+      - "3180:80"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.hub.rule=Host(`hub.${DOMAIN}`, `cartaohub.com`, `www.cartaohub.com`)"
+      - traefik.http.services.hub.loadbalancer.server.port=80
+      - "traefik.http.routers.hub.tls.certresolver=le"

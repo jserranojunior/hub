@@ -1,0 +1,1 @@
+import{_ as e}from"./logo.4b554b4f.js";import{_ as o,o as c,c as r,a as s}from"./index.40169276.js";const a={},t={class:"flex justify-center"},_=s("div",{class:"w-96"},[s("hr",{class:"bg-black border-gray-900 mb-4"}),s("img",{src:e,class:"mx-auto"})],-1),n=[_];function i(m,d){return c(),r("div",t,n)}var p=o(a,[["render",i]]);export{p as L};

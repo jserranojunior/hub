@@ -1,0 +1,37 @@
+version: "3"
+
+networks:
+  stack_ponte:
+    external: true
+
+services:
+  sefro_back:
+    image: golang:1.16.3
+    container_name: "sefro_back"
+    networks:
+      - stack_ponte
+    ports:
+      - "5080:8000"
+    volumes:
+      - ${PATHPESSOAL}/sefro/backgo:/app
+    command: "/bin/sh -c 'go install github.com/cespare/reflex@latest && cd /app && reflex -c /app/reflex.conf'"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.backsefro.rule=Host(`backsefro.${DOMAIN}`)"
+      - "traefik.http.services.backsefro.loadbalancer.server.port=8000"
+
+  sefro_front:
+    container_name: "sefro_front"
+    image: "node:lts-alpine"
+    working_dir: /app
+    networks:
+      - stack_ponte
+    volumes:
+      - ${PATHPESSOAL}/sefro/front:/app
+    command: "yarn dev"
+    ports:
+      - "8081:3000"
+    labels:
+      - "traefik.enable=true"
+      - traefik.http.routers.frontsefro.rule=Host(`frontsefro.${DOMAIN}`)
+      - traefik.http.services.frontsefro.loadbalancer.server.port=3000
